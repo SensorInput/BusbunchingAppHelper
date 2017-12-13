@@ -18,13 +18,24 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.ResponseHandlerInterface;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.DataOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
+
+import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private LocationManager locationManager;
     //Listen for location changes
     private LocationListener listener;
-    private String URL_ADDRESS = "hallo webserver";
+    private String URL_ADDRESS = "http://h2650399.stratoserver.net:4545/position";
     private int ID = 1;
     private Date time = Calendar.getInstance().getTime();
 
@@ -61,7 +72,13 @@ public class MainActivity extends AppCompatActivity {
             public void onLocationChanged(Location location) {
                 text.append("\n "  + location.getLatitude()+" " + location.getLongitude());
                 //text.setText("\n " + location.getLongitude() + " " + location.getLatitude());
-                //sendPost(location);
+                try {
+                    sendPost(location);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -137,43 +154,27 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void sendPost(final Location location) {
-        Thread thread = new Thread(new Runnable() {
+    private static AsyncHttpClient httpClient = new AsyncHttpClient();
+
+    public void sendPost(final Location location) throws JSONException, UnsupportedEncodingException {
+        JSONObject jsonParam = new JSONObject();
+        jsonParam.put("lat", location.getLatitude());
+        jsonParam.put("lng", location.getLongitude());
+        jsonParam.put("journeyId", ID);
+        jsonParam.put("time", System.currentTimeMillis());
+
+        httpClient.post(getBaseContext(), URL_ADDRESS, new StringEntity(jsonParam.toString()), "application/json", new AsyncHttpResponseHandler() {
             @Override
-            public void run() {
-                try {
-                    URL url = new URL(URL_ADDRESS);
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                    conn.setRequestProperty("Accept","application/json");
-                    conn.setDoOutput(true);
-                    conn.setDoInput(true);
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                System.out.println("Post success");
+            }
 
-                    JSONObject jsonParam = new JSONObject();
-                    jsonParam.put("latitude", location.getLatitude());
-                    jsonParam.put("longitude", location.getLongitude());
-                    jsonParam.put("ID", ID);
-                    jsonParam.put("TimeStamp", time);
-
-
-                    Log.i("JSON", jsonParam.toString());
-                    DataOutputStream os = new DataOutputStream(conn.getOutputStream());
-                    //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
-                    os.writeBytes(jsonParam.toString());
-
-                    os.flush();
-                    os.close();
-
-
-                    conn.disconnect();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                error.printStackTrace();
+                System.out.println("Failed success " + statusCode);
             }
         });
-
-        thread.start();
     }
 
 }
