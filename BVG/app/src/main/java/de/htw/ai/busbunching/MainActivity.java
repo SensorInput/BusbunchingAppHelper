@@ -15,8 +15,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.htw.ai.bvg.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     private String URL_ADDRESS = "http://h2650399.stratoserver.net:4545/position";
     private int ID = 1;
     private Date time = Calendar.getInstance().getTime();
+    private EditText journey;
+    private int journeyID = 0;
 
 
 
@@ -55,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
         text = (TextView) findViewById(R.id.textView);
         button = (Button) findViewById(R.id.Start_button);
         button_stop = (Button) findViewById(R.id.Stop_button);
+        journey = (EditText) findViewById(R.id.JourneyEditText);
 
         //Location via GPS anfragen ist ein System Service
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -141,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
             @SuppressLint("MissingPermission")
             @Override
             public void onClick(View view) {
+                journeyID = Integer.valueOf(journey.getText().toString());
                 //minTime = wie oft sollen neue GPS daten geholt werden, minDistance bei welcher entfernung sollen neue GPS daten geholt werden
                 locationManager.requestLocationUpdates("gps", 10000, 0, listener);
             }
@@ -153,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
         JSONObject jsonParam = new JSONObject();
         jsonParam.put("lat", location.getLatitude());
         jsonParam.put("lng", location.getLongitude());
-        jsonParam.put("journeyId", ID);
+        jsonParam.put("journeyId", journeyID);
         jsonParam.put("time", System.currentTimeMillis());
 
         httpClient.post(getBaseContext(), URL_ADDRESS, new StringEntity(jsonParam.toString()), "application/json", new AsyncHttpResponseHandler() {

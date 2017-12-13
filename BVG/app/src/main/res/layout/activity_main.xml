@@ -10,11 +10,12 @@
         android:id="@+id/Stop_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
         android:text="Stop"
         app:layout_constraintBaseline_toBaselineOf="@+id/Start_button"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.916"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toEndOf="@+id/Start_button" />
 
     <Button
@@ -30,7 +31,7 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="368dp"
-        android:layout_height="431dp"
+        android:layout_height="407dp"
         android:layout_marginTop="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -50,6 +51,18 @@
                 android:textSize="24sp" />
         </LinearLayout>
     </ScrollView>
+
+    <EditText
+        android:id="@+id/JourneyEditText"
+        android:layout_width="138dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:ems="10"
+        android:inputType="number"
+        app:layout_constraintBaseline_toBaselineOf="@+id/Start_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
 
