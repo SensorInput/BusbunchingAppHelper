@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.htw.s0551733.bvg.MainActivity">
+    tools:context="com.htw.ai.bvg.de.htw.ai.bvg.MainActivity">
 
     <Button
         android:id="@+id/Stop_button"

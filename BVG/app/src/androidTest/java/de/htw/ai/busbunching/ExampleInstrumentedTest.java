@@ -1,4 +1,4 @@
-package com.htw.s0551733.bvg;
+package de.htw.ai.busbunching;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
