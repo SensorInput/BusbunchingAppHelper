@@ -156,8 +156,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void sendPost(final Location location) throws JSONException, UnsupportedEncodingException {
         JSONObject jsonParam = new JSONObject();
-        jsonParam.put("lat", location.getLatitude());
-        jsonParam.put("lng", location.getLongitude());
+        JSONObject geoJsonObject = new JSONObject();
+        geoJsonObject.put("lng", location.getLongitude());
+        geoJsonObject.put("lat", location.getLatitude());
+        jsonParam.put("lngLat", geoJsonObject);
         jsonParam.put("journeyId", journeyID);
         jsonParam.put("time", System.currentTimeMillis());
 
