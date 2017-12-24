@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private LocationManager locationManager;
     //Listen for location changes
     private LocationListener listener;
-    private String URL_ADDRESS = "http://h2650399.stratoserver.net:4545/position";
+    private String URL_ADDRESS = "http://h2650399.stratoserver.net:4545/api/v1/position";
     private int ID = 1;
     private Date time = Calendar.getInstance().getTime();
     private EditText journey;
